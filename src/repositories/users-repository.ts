@@ -1,4 +1,6 @@
-import { User } from "@/@types/global";
+import { User } from "./model/user";
+
+ 
 
 export interface UsersRepository {
 	create: ({

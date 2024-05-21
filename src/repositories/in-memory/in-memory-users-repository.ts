@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import { User } from "@/@types/global";
 import { UsersRepository } from "@/repositories/users-repository";
+import { User } from "../model/user";
 
 export class InMemoryUsersRepository implements UsersRepository {
   public items: User[] = [];
@@ -17,7 +17,7 @@ export class InMemoryUsersRepository implements UsersRepository {
       id: randomUUID(),
       email,
       name,
-      password,
+      password_hashed: password,
       created_at: new Date(),
       updated_at: new Date(),
     };
