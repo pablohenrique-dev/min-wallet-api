@@ -1,24 +1,64 @@
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, beforeEach } from "vitest";
 import { RegisterUseCase } from "./register";
+import { compare } from "bcryptjs";
+import { UserAlreadyExistsError } from "./errors/user-already-exists";
+
+
 
 describe("Register useCase", () => {
-  it("Should be able to create a new user", async () => {
-    const inMemoryUsersRepository = new InMemoryUsersRepository();
-    const sut = new RegisterUseCase(inMemoryUsersRepository);
+  let inMemoryUsersRepository: InMemoryUsersRepository;
+  let sut: RegisterUseCase;
 
+  const password = "123456";
+  
+  beforeEach(() => {
+    inMemoryUsersRepository = new InMemoryUsersRepository();
+    sut = new RegisterUseCase(inMemoryUsersRepository);
+  });
+
+  it("Should be able to hash the password", async () => {
     const { user } = await sut.execute({
       name: "John Doe",
       email: "johndoe@email.com",
-      password: "123456",
+      password,
+    });
+
+    const isPasswordHashed = await compare(password, user.password_hashed);
+
+    expect(isPasswordHashed).toBe(true);
+  });
+
+  it("Should be able to create a new user", async () => {
+    const { user } = await sut.execute({
+      name: "John Doe",
+      email: "johndoe@email.com",
+      password,
     });
 
     expect(user).toEqual(
       expect.objectContaining({
         name: "John Doe",
         email: "johndoe@email.com",
-        password: "123456",
       })
     );
+  });
+
+  it("Should not create a user if email is already in use", async () => {
+    const email = "johndoe@email.com";
+
+    await sut.execute({
+      name: "John Doe",
+      email,
+      password: "123456",
+    });
+
+    await expect(() => {
+      return sut.execute({
+        name: "John Doe",
+        email,
+        password: "123456",
+      });
+    }).rejects.toBeInstanceOf(UserAlreadyExistsError);
   });
 });
