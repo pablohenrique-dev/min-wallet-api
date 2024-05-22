@@ -7,14 +7,14 @@ import { UserAlreadyExistsError } from "./errors/user-already-exists";
 
 
 describe("Register useCase", () => {
-  let inMemoryUsersRepository: InMemoryUsersRepository;
+  let usersRepository: InMemoryUsersRepository;
   let sut: RegisterUseCase;
 
   const password = "123456";
   
   beforeEach(() => {
-    inMemoryUsersRepository = new InMemoryUsersRepository();
-    sut = new RegisterUseCase(inMemoryUsersRepository);
+    usersRepository = new InMemoryUsersRepository();
+    sut = new RegisterUseCase(usersRepository);
   });
 
   it("Should be able to hash the password", async () => {
