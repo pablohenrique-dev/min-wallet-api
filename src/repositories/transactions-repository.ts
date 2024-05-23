@@ -8,7 +8,7 @@ export interface TransactionsRepository {
     user_id,
   }: {
     title: string;
-    description?: string;
+    description: string;
     value: number;
     user_id: string;
   }) => Promise<Transaction>;
@@ -36,4 +36,18 @@ export interface TransactionsRepository {
     user_id: string;
     transaction_id: string;
   }) => Promise<string>;
+
+  updateById: ({
+    user_id,
+    transaction_id,
+    title,
+    description,
+    value,
+  }: {
+    user_id: string;
+    transaction_id: string;
+    title: string;
+    description: string;
+    value: number;
+  }) => Promise<Transaction>;
 }
