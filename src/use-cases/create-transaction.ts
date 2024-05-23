@@ -3,7 +3,7 @@ import { TransactionsRepository } from "@/repositories/transactions-repository";
 
 interface CreateTransactionUseCaseParams {
   title: string;
-  description?: string;
+  description: string;
   value: number;
   user_id: string;
 }

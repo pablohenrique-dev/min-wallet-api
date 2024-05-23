@@ -1,14 +1,13 @@
-import { InMemorytransactionsRepository } from "@/repositories/in-memory/in-memory-transactions-repository";
+import { InMemoryTransactionsRepository } from "@/repositories/in-memory/in-memory-transactions-repository";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CreateTransactionUseCase } from "./create-transaction";
-import { rejects } from "assert";
 
 describe("Create Transactions useCase", () => {
-  let transactionsRepository: InMemorytransactionsRepository;
+  let transactionsRepository: InMemoryTransactionsRepository;
   let sut: CreateTransactionUseCase;
 
   beforeEach(() => {
-    transactionsRepository = new InMemorytransactionsRepository();
+    transactionsRepository = new InMemoryTransactionsRepository();
     sut = new CreateTransactionUseCase(transactionsRepository);
   });
 

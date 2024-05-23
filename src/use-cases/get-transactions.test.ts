@@ -1,13 +1,13 @@
-import { InMemorytransactionsRepository } from "@/repositories/in-memory/in-memory-transactions-repository";
+import { InMemoryTransactionsRepository } from "@/repositories/in-memory/in-memory-transactions-repository";
 import { beforeEach, describe, expect, it } from "vitest";
 import { GetAllTransactionUseCase } from "./get-transactions";
 
 describe("Get all transactions useCase", () => {
-  let transactionsRepository: InMemorytransactionsRepository;
+  let transactionsRepository: InMemoryTransactionsRepository;
   let sut: GetAllTransactionUseCase;
 
   beforeEach(async () => {
-    transactionsRepository = new InMemorytransactionsRepository();
+    transactionsRepository = new InMemoryTransactionsRepository();
     sut = new GetAllTransactionUseCase(transactionsRepository);
   });
 
@@ -17,6 +17,7 @@ describe("Get all transactions useCase", () => {
         title: `Title ${i}`,
         value: 1 + i,
         user_id: "user-01",
+        description: "",
       });
     }
     const { transactions } = await sut.execute({

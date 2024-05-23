@@ -2,7 +2,7 @@ import { randomUUID } from "crypto";
 import { Transaction } from "../model/transtaction";
 import { TransactionsRepository } from "../transactions-repository";
 
-export class InMemorytransactionsRepository implements TransactionsRepository {
+export class InMemoryTransactionsRepository implements TransactionsRepository {
   public items: Transaction[] = [];
 
   async create({
@@ -12,7 +12,7 @@ export class InMemorytransactionsRepository implements TransactionsRepository {
     user_id,
   }: {
     title: string;
-    description?: string;
+    description: string;
     value: number;
     user_id: string;
   }) {
@@ -73,5 +73,36 @@ export class InMemorytransactionsRepository implements TransactionsRepository {
     );
 
     return transaction_id;
+  }
+
+  async updateById({
+    user_id,
+    transaction_id,
+    title,
+    value,
+    description,
+  }: {
+    user_id: string;
+    transaction_id: string;
+    title: string;
+    description: string;
+    value: number;
+  }) {
+    const transactionIndex = this.items.findIndex(
+      (transaction) =>
+        transaction.id === transaction_id && transaction.user_id === user_id
+    );
+
+    if (transactionIndex !== -1) {
+      this.items[transactionIndex] = {
+        ...this.items[transactionIndex],
+        title,
+        description: description ?? null,
+        value,
+        updated_at: new Date(),
+      };
+    }
+
+    return this.items[transactionIndex];
   }
 }

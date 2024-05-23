@@ -1,15 +1,14 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { DeleteTransactionUseCase } from "./delete-transaction";
-import { InMemorytransactionsRepository } from "@/repositories/in-memory/in-memory-transactions-repository";
+import { InMemoryTransactionsRepository } from "@/repositories/in-memory/in-memory-transactions-repository";
 import { ResourceNotFoundError } from "./errors/resource-not-fount";
-import { Transaction } from "@/repositories/model/transtaction";
 
 describe("Delete transaction useCase", () => {
-  let transactionsRepository: InMemorytransactionsRepository;
+  let transactionsRepository: InMemoryTransactionsRepository;
   let sut: DeleteTransactionUseCase;
 
   beforeEach(() => {
-    transactionsRepository = new InMemorytransactionsRepository();
+    transactionsRepository = new InMemoryTransactionsRepository();
     sut = new DeleteTransactionUseCase(transactionsRepository);
   });
 
@@ -17,6 +16,7 @@ describe("Delete transaction useCase", () => {
     for (let i = 0; i < 5; i++) {
       await transactionsRepository.create({
         title: `Title ${i}`,
+        description: "",
         value: 1 + i,
         user_id: "user-01",
       });
@@ -35,6 +35,7 @@ describe("Delete transaction useCase", () => {
     for (let i = 0; i < 5; i++) {
       await transactionsRepository.create({
         title: `Title ${i}`,
+        description: "",
         value: 1 + i,
         user_id: "user-01",
       });
@@ -42,7 +43,8 @@ describe("Delete transaction useCase", () => {
     }
 
     const secondTransaction = await transactionsRepository.create({
-      title: `Second transaction`,
+      title: "Second transaction",
+      description: "",
       value: 20,
       user_id: "user-01",
     });
