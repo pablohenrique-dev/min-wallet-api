@@ -31,13 +31,27 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
     return transaction;
   }
 
-  async findManyByUserId({ user_id, page }: { user_id: string; page: number }) {
+  async findMany({
+    user_id,
+    title,
+    page,
+  }: {
+    user_id: string;
+    title: string;
+    page: number;
+  }) {
     const itemsPerPage = 30;
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
     const transactions = this.items
-      .filter((transaction) => transaction.user_id === user_id)
+      .filter(
+        (transaction) =>
+          transaction.user_id === user_id &&
+          transaction.title
+            .toLocaleLowerCase()
+            .includes(title.toLocaleLowerCase())
+      )
       .slice(startIndex, endIndex);
 
     return transactions;

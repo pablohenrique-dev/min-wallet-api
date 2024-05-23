@@ -3,6 +3,7 @@ import { TransactionsRepository } from "@/repositories/transactions-repository";
 
 interface GetAllTransactionsUseCaseParams {
   user_id: string;
+  title?: string;
   page?: number;
 }
 
@@ -11,15 +12,17 @@ interface GetAllTransactionsUseCaseResponse {
   transactions_amount: number;
 }
 
-export class GetAllTransactionUseCase {
+export class GetTransactionsUseCase {
   constructor(private transactionsRepository: TransactionsRepository) {}
 
   async execute({
     user_id,
+    title,
     page,
   }: GetAllTransactionsUseCaseParams): Promise<GetAllTransactionsUseCaseResponse> {
-    const transactions = await this.transactionsRepository.findManyByUserId({
+    const transactions = await this.transactionsRepository.findMany({
       user_id,
+      title: title ?? "",
       page: page ?? 1,
     });
 

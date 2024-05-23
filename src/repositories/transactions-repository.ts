@@ -13,11 +13,13 @@ export interface TransactionsRepository {
     user_id: string;
   }) => Promise<Transaction>;
 
-  findManyByUserId: ({
+  findMany: ({
     user_id,
+    title,
     page,
   }: {
     user_id: string;
+    title: string;
     page: number;
   }) => Promise<Transaction[]>;
 
