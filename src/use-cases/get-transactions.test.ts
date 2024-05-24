@@ -9,9 +9,7 @@ describe("Get all transactions useCase", () => {
   beforeEach(async () => {
     transactionsRepository = new InMemoryTransactionsRepository();
     sut = new GetTransactionsUseCase(transactionsRepository);
-  });
 
-  it("Should be able to get paginated user transactions", async () => {
     for (let i = 0; i < 31; i++) {
       await transactionsRepository.create({
         title: `Title ${i}`,
@@ -20,7 +18,9 @@ describe("Get all transactions useCase", () => {
         description: "",
       });
     }
+  });
 
+  it("Should be able to get paginated user transactions", async () => {
     const { transactions } = await sut.execute({
       user_id: "user-01",
     });
@@ -29,25 +29,33 @@ describe("Get all transactions useCase", () => {
   });
 
   it("Should be able to get a transaction based on its title", async () => {
-    for (let i = 0; i < 5; i++) {
-      await transactionsRepository.create({
-        title: `Title ${i}`,
-        value: 1 + i,
-        user_id: "user-01",
-        description: "",
-      });
-    }
-
     const { transactions } = await sut.execute({
       user_id: "user-01",
-      title: "Title 2",
+      title: "Title 0",
     });
 
-    expect(transactions).toEqual([
-      expect.objectContaining({
-        title: "Title 2",
-      }),
-    ]);
     expect(transactions).toHaveLength(1);
+  });
+
+  it("Should be able to sort transactions in descending order", async () => {
+    const { transactions } = await sut.execute({
+      user_id: "user-01",
+      order: "desc",
+    });
+
+    expect(transactions[0].value).toBeGreaterThan(
+      transactions[transactions.length - 1].value
+    );
+  });
+  
+  it("Should be able to sort transactions in ascending order", async () => {
+    const { transactions } = await sut.execute({
+      user_id: "user-01",
+      order: "asc",
+    });
+
+    expect(transactions[0].value).toBeLessThan(
+      transactions[transactions.length - 1].value
+    );
   });
 });

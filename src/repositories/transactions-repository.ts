@@ -17,10 +17,16 @@ export interface TransactionsRepository {
     user_id,
     title,
     page,
+    from,
+    to,
+    order,
   }: {
     user_id: string;
     title: string;
     page: number;
+    from: string | null;
+    to: string | null;
+    order: "desc" | "asc" | null;
   }) => Promise<Transaction[]>;
 
   findById: ({

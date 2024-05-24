@@ -35,24 +35,49 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
     user_id,
     title,
     page,
+    from,
+    to,
+    order,
   }: {
     user_id: string;
     title: string;
     page: number;
+    from: string | null;
+    to: string | null;
+    order: "desc" | "asc" | null;
   }) {
     const itemsPerPage = 30;
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
-    const transactions = this.items
-      .filter(
-        (transaction) =>
+    const fromDate = from ? new Date(from) : null;
+    const toDate = to ? new Date(to) : null;
+
+    let transactions = this.items
+      .filter((transaction) => {
+        const transactionDate = new Date(transaction.created_at);
+
+        return (
           transaction.user_id === user_id &&
           transaction.title
             .toLocaleLowerCase()
-            .includes(title.toLocaleLowerCase())
-      )
+            .includes(title.toLocaleLowerCase()) &&
+          (!fromDate || transactionDate >= fromDate) &&
+          (!toDate || transactionDate <= toDate)
+        );
+      })
       .slice(startIndex, endIndex);
+
+    if (order) {
+      transactions.sort((a, b) => {
+        if (order === "asc") {
+          return a.value - b.value;
+        } else if (order === "desc") {
+          return b.value - a.value;
+        }
+        return 0;
+      });
+    }
 
     return transactions;
   }
