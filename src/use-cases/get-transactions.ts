@@ -12,7 +12,6 @@ interface GetAllTransactionsUseCaseParams {
 
 interface GetAllTransactionsUseCaseResponse {
   transactions: Transaction[];
-  transactions_amount: number;
 }
 
 export class GetTransactionsUseCase {
@@ -30,11 +29,11 @@ export class GetTransactionsUseCase {
       user_id,
       title: title ?? "",
       page: page ?? 1,
-      from: from ?? null,
-      to: to ?? null,
-      order: order ?? null,
+      from,
+      to,
+      order,
     });
 
-    return { transactions, transactions_amount: transactions.length };
+    return { transactions };
   }
 }
