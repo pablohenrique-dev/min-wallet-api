@@ -1,21 +1,16 @@
 import { randomUUID } from "crypto";
 import { Transaction } from "../model/transtaction";
-import { TransactionsRepository } from "../transactions-repository";
+import { CreateTransactionParams, DeleteByIdTransactionParams, FindByIdTransactionParams, FindManyTransactionsParams, TransactionsRepository, UpdateByIdTransactionParams } from "../transactions-repository";
 
 export class InMemoryTransactionsRepository implements TransactionsRepository {
   public items: Transaction[] = [];
 
   async create({
-    title,
-    description,
-    value,
     user_id,
-  }: {
-    title: string;
-    description: string;
-    value: number;
-    user_id: string;
-  }) {
+    title,
+    value,
+    description,
+  }: CreateTransactionParams) {
     const transaction: Transaction = {
       id: randomUUID(),
       title,
@@ -38,14 +33,7 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
     from,
     to,
     order,
-  }: {
-    user_id: string;
-    title: string;
-    page: number;
-    from: string | null;
-    to: string | null;
-    order: "desc" | "asc" | null;
-  }) {
+  }: FindManyTransactionsParams) {
     const itemsPerPage = 30;
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -84,14 +72,11 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 
   async findById({
     user_id,
-    transaction_id,
-  }: {
-    user_id: string;
-    transaction_id: string;
-  }) {
+    id,
+  }: FindByIdTransactionParams) {
     const transaction = this.items.find(
       (transaction) =>
-        transaction.user_id === user_id && transaction.id === transaction_id
+        transaction.user_id === user_id && transaction.id === id
     );
 
     if (!transaction) return null;
@@ -99,44 +84,31 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
     return transaction;
   }
 
-  async deleteById({
-    user_id,
-    transaction_id,
-  }: {
-    user_id: string;
-    transaction_id: string;
-  }) {
+  async deleteById({ user_id, id }: DeleteByIdTransactionParams) {
     this.items.filter(
       (transaction) =>
-        transaction.user_id === user_id && transaction.id !== transaction_id
+        transaction.user_id === user_id && transaction.id !== id
     );
 
-    return transaction_id;
+    return id!;
   }
 
   async updateById({
     user_id,
-    transaction_id,
+    id,
     title,
     value,
     description,
-  }: {
-    user_id: string;
-    transaction_id: string;
-    title: string;
-    description: string;
-    value: number;
-  }) {
+  }: UpdateByIdTransactionParams) {
     const transactionIndex = this.items.findIndex(
-      (transaction) =>
-        transaction.id === transaction_id && transaction.user_id === user_id
+      (transaction) => transaction.id === id && transaction.user_id === user_id
     );
 
     if (transactionIndex !== -1) {
       this.items[transactionIndex] = {
         ...this.items[transactionIndex],
         title,
-        description: description ?? null,
+        description,
         value,
         updated_at: new Date(),
       };
