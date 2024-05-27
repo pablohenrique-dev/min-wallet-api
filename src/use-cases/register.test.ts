@@ -4,14 +4,12 @@ import { RegisterUseCase } from "./register";
 import { compare } from "bcryptjs";
 import { UserAlreadyExistsError } from "./errors/user-already-exists";
 
-
-
 describe("Register useCase", () => {
   let usersRepository: InMemoryUsersRepository;
   let sut: RegisterUseCase;
 
   const password = "123456";
-  
+
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
     sut = new RegisterUseCase(usersRepository);
