@@ -31,7 +31,7 @@ export class RegisterUseCase {
 
     const user = await this.usersRepository.create({
       email,
-      password: hashedPassword,
+      password_hashed: hashedPassword,
       name,
     });
 

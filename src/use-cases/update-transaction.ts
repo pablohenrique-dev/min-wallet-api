@@ -4,7 +4,7 @@ import { ResourceNotFoundError } from "./errors/resource-not-fount";
 
 interface UpdateTransactionUseCaseParams {
   user_id: string;
-  transaction_id: string;
+  id: string;
   title: string;
   description: string;
   value: number;
@@ -19,14 +19,14 @@ export class UpdateTransactionUseCase {
 
   async execute({
     user_id,
-    transaction_id,
+    id,
     title,
     description,
     value,
   }: UpdateTransactionUseCaseParams): Promise<UpdateTransactionUseCaseResponse> {
     const doesTheTransactionExist = await this.transactionsRepository.findById({
       user_id,
-      transaction_id,
+      id,
     });
 
     if (!doesTheTransactionExist) {
@@ -35,7 +35,7 @@ export class UpdateTransactionUseCase {
 
     const transaction = await this.transactionsRepository.updateById({
       user_id,
-      transaction_id,
+      id,
       title,
       description,
       value,

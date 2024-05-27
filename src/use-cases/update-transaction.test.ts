@@ -25,7 +25,7 @@ describe("Update transaction useCase", () => {
     await expect(() =>
       sut.execute({
         user_id: "user-01",
-        transaction_id: "transaction-01",
+        id: "transaction-01",
         title: "NodeJs course",
         description: "",
         value: 24.9,
@@ -46,9 +46,9 @@ describe("Update transaction useCase", () => {
       description: "A course about node, ts and test",
       value: 24.9,
       user_id: newTransaction.user_id,
-      transaction_id: newTransaction.id,
+      id: newTransaction.id,
     });
-
+    
     expect(transaction.description).toBe("A course about node, ts and test");
   });
 });

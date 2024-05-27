@@ -25,7 +25,7 @@ describe("Delete transaction useCase", () => {
     await expect(() =>
       sut.execute({
         user_id: "user-01",
-        transaction_id: "transaction-01",
+        id: "transaction-01",
       })
     ).rejects.toBeInstanceOf(ResourceNotFoundError);
   });
@@ -49,12 +49,12 @@ describe("Delete transaction useCase", () => {
       user_id: "user-01",
     });
 
-    const { transaction_id } = await sut.execute({
+    const { id } = await sut.execute({
       user_id: "user-01",
-      transaction_id: secondTransaction.id,
+      id: secondTransaction.id,
     });
 
-    expect(transaction_id).toBe(secondTransaction.id);
+    expect(id ).toBe(secondTransaction.id);
     expect(transactionsAmount).toBe(5);
   });
 });

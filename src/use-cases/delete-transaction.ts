@@ -3,11 +3,11 @@ import { ResourceNotFoundError } from "./errors/resource-not-fount";
 
 interface DeleteTransactionUseCaseParams {
   user_id: string;
-  transaction_id: string;
+  id: string;
 }
 
 interface DeleteTransactionUseCaseResponse {
-  transaction_id: string;
+  id: string;
 }
 
 export class DeleteTransactionUseCase {
@@ -15,11 +15,11 @@ export class DeleteTransactionUseCase {
 
   async execute({
     user_id,
-    transaction_id,
+    id,
   }: DeleteTransactionUseCaseParams): Promise<DeleteTransactionUseCaseResponse> {
     const doesTransactionExist = await this.transactionsRepository.findById({
       user_id,
-      transaction_id,
+      id,
     });
 
     if (!doesTransactionExist) {
@@ -28,9 +28,9 @@ export class DeleteTransactionUseCase {
 
     const transactionId = await this.transactionsRepository.deleteById({
       user_id,
-      transaction_id,
+      id,
     });
 
-    return { transaction_id: transactionId };
+    return { id: transactionId };
   }
 }
