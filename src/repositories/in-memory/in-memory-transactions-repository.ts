@@ -49,7 +49,7 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
           transaction.user_id === user_id &&
           transaction.title
             .toLocaleLowerCase()
-            .includes(title.toLocaleLowerCase()) &&
+            .includes(title ? title.toLocaleLowerCase() : "") &&
           (!fromDate || transactionDate >= fromDate) &&
           (!toDate || transactionDate <= toDate)
         );

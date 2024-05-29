@@ -9,7 +9,7 @@ export interface CreateTransactionParams {
 
 export interface FindManyTransactionsParams {
   user_id: string;
-  title: string;
+  title?: string;
   page: number;
   from?: string;
   to?: string;
