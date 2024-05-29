@@ -27,7 +27,7 @@ export class GetTransactionsUseCase {
   }: GetAllTransactionsUseCaseParams): Promise<GetAllTransactionsUseCaseResponse> {
     const transactions = await this.transactionsRepository.findMany({
       user_id,
-      title: title ?? "",
+      title,
       page: page ?? 1,
       from,
       to,

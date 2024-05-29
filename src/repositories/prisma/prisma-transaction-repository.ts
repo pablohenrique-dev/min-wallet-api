@@ -42,14 +42,17 @@ export class PrismaTransactionRepository implements TransactionsRepository {
     const transactions = await prisma.transaction.findMany({
       where: {
         user_id,
-        title,
+        title: {
+          contains: title,
+          mode: "insensitive",
+        },
         created_at: {
           lte: to ? new Date(to) : undefined,
           gte: from ? new Date(from) : undefined,
         },
       },
       orderBy: {
-        value: order ?? undefined,
+        value: order,
       },
       skip: (page - 1) * itemsPerPage,
     });
