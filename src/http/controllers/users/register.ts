@@ -5,8 +5,8 @@ import z from "zod";
 
 export async function registerUserController(req: Request, res: Response) {
   const registerBodySchema = z.object({
-    name: z.string(),
-    email: z.string().email(),
+    name: z.string().trim(),
+    email: z.string().trim().email(),
     password: z
       .string()
       .min(6, { message: "The password must be at least 6 characters long!" }),
