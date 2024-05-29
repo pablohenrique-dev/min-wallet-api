@@ -6,7 +6,10 @@ export async function getTransactionsController(req: Request, res: Response) {
   const { id: user_id } = req.user;
 
   const searchParamsTransactionSchema = z.object({
-    page: z.coerce.number().transform((value) => (value <= 0 ? 1 : value)),
+    page: z.coerce
+      .number()
+      .transform((value) => (value <= 0 ? 1 : value))
+      .optional(),
     title: z.string().optional(),
     from: z.string().optional(),
     to: z.string().optional(),
