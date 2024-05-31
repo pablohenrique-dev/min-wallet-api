@@ -14,6 +14,7 @@ export interface FindManyTransactionsParams {
   from?: string;
   to?: string;
   order?: "desc" | "asc";
+  itemsPerPage: number;
 }
 
 export interface FindByIdTransactionParams {
@@ -21,9 +22,8 @@ export interface FindByIdTransactionParams {
   id: string;
 }
 
-export interface DeleteByIdTransactionParams extends FindByIdTransactionParams {
- 
-}
+export interface DeleteByIdTransactionParams
+  extends FindByIdTransactionParams {}
 
 export interface UpdateByIdTransactionParams extends CreateTransactionParams {
   id: string;
@@ -44,7 +44,11 @@ export interface TransactionsRepository {
     from,
     to,
     order,
-  }: FindManyTransactionsParams) => Promise<Transaction[]>;
+    itemsPerPage,
+  }: FindManyTransactionsParams) => Promise<{
+    count: number;
+    transactions: Transaction[];
+  }>;
 
   findById: ({
     user_id,

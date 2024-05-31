@@ -1,6 +1,13 @@
 import { randomUUID } from "crypto";
 import { Transaction } from "../model/transtaction";
-import { CreateTransactionParams, DeleteByIdTransactionParams, FindByIdTransactionParams, FindManyTransactionsParams, TransactionsRepository, UpdateByIdTransactionParams } from "../transactions-repository";
+import {
+  CreateTransactionParams,
+  DeleteByIdTransactionParams,
+  FindByIdTransactionParams,
+  FindManyTransactionsParams,
+  TransactionsRepository,
+  UpdateByIdTransactionParams,
+} from "../transactions-repository";
 
 export class InMemoryTransactionsRepository implements TransactionsRepository {
   public items: Transaction[] = [];
@@ -33,8 +40,8 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
     from,
     to,
     order,
+    itemsPerPage
   }: FindManyTransactionsParams) {
-    const itemsPerPage = 30;
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
@@ -67,16 +74,15 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
       });
     }
 
-    return transactions;
+    return {
+      count: transactions.length,
+      transactions,
+    };
   }
 
-  async findById({
-    user_id,
-    id,
-  }: FindByIdTransactionParams) {
+  async findById({ user_id, id }: FindByIdTransactionParams) {
     const transaction = this.items.find(
-      (transaction) =>
-        transaction.user_id === user_id && transaction.id === id
+      (transaction) => transaction.user_id === user_id && transaction.id === id
     );
 
     if (!transaction) return null;
@@ -86,8 +92,7 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 
   async deleteById({ user_id, id }: DeleteByIdTransactionParams) {
     this.items.filter(
-      (transaction) =>
-        transaction.user_id === user_id && transaction.id !== id
+      (transaction) => transaction.user_id === user_id && transaction.id !== id
     );
 
     return id!;

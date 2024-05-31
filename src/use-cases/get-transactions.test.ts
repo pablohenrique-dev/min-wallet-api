@@ -23,9 +23,10 @@ describe("Get all transactions useCase", () => {
   it("Should be able to get paginated user transactions", async () => {
     const { transactions } = await sut.execute({
       user_id: "user-01",
+      page: 2,
     });
 
-    expect(transactions).toHaveLength(30);
+    expect(transactions).toHaveLength(1);
   });
 
   it("Should be able to get a transaction based on its title", async () => {
@@ -37,7 +38,7 @@ describe("Get all transactions useCase", () => {
     expect(transactions).toHaveLength(1);
   });
 
-  it("Should be able to sort transactions in descending order", async () => {
+  it("Should be able to sort transactions in descending order based on its value", async () => {
     const { transactions } = await sut.execute({
       user_id: "user-01",
       order: "desc",
@@ -47,7 +48,7 @@ describe("Get all transactions useCase", () => {
       transactions[transactions.length - 1].value
     );
   });
-  
+
   it("Should be able to sort transactions in ascending order", async () => {
     const { transactions } = await sut.execute({
       user_id: "user-01",

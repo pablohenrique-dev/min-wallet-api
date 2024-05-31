@@ -36,9 +36,8 @@ export class PrismaTransactionRepository implements TransactionsRepository {
     from,
     to,
     order,
+    itemsPerPage,
   }: FindManyTransactionsParams) {
-    const itemsPerPage = 30;
-
     const transactions = await prisma.transaction.findMany({
       where: {
         user_id,
@@ -54,10 +53,28 @@ export class PrismaTransactionRepository implements TransactionsRepository {
       orderBy: {
         value: order,
       },
+      take: itemsPerPage,
       skip: (page - 1) * itemsPerPage,
     });
 
-    return transactions;
+    const count = await prisma.transaction.count({
+      where: {
+        user_id,
+        title: {
+          contains: title,
+          mode: "insensitive",
+        },
+        created_at: {
+          lte: to ? new Date(to) : undefined,
+          gte: from ? new Date(from) : undefined,
+        },
+      },
+    });
+
+    return {
+      count,
+      transactions,
+    };
   }
 
   async findById({ user_id, id }: FindByIdTransactionParams) {

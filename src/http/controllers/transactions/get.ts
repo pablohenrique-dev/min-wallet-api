@@ -22,16 +22,15 @@ export async function getTransactionsController(req: Request, res: Response) {
 
   const getTransactionsUseCase = makeGetTransactionsUseCase();
 
-  const { transactions } = await getTransactionsUseCase.execute({
-    title,
-    page,
-    from,
-    to,
-    order,
-    user_id,
-  });
+  const { count, pages, next_page, previous_page, transactions } =
+    await getTransactionsUseCase.execute({
+      title,
+      page,
+      from,
+      to,
+      order,
+      user_id,
+    });
 
-  return res.status(200).json({
-    transactions,
-  });
+  return res.status(200).json({ count, pages, next_page, previous_page, transactions });
 }
