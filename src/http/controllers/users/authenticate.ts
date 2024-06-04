@@ -22,11 +22,28 @@ export async function authenticateController(req: Request, res: Response) {
 
     const { user } = await authenticateUseCase.execute({ email, password });
 
-    const token = sign({}, secret, { subject: user.id, expiresIn });
-
-    return res.status(200).json({
-      token,
+    const token = sign({}, secret, {
+      subject: user.id,
+      expiresIn: expiresIn["1h"],
     });
+
+    const refreshToken = sign({}, secret, {
+      subject: user.id,
+      expiresIn: expiresIn["7d"],
+    });
+
+    return res
+      .cookie("refreshToken", refreshToken, {
+        path: "/",
+        secure: true,
+        sameSite: "strict",
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+      })
+      .status(200)
+      .json({
+        token,
+      });
   } catch (error) {
     if (error instanceof InvalidCredentialsError) {
       return res.status(400).json({
