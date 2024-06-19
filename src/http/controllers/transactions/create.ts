@@ -26,5 +26,5 @@ export async function createTransactionController(req: Request, res: Response) {
     user_id,
   });
 
-  return res.status(200).json({ transaction });
+  return res.status(200).json(transaction);
 }
