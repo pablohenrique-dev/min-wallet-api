@@ -1,0 +1,696 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Min-wallet",
+    "description": "An app that enables you to manage your financial life",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "Development server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "parameters": {
+      "refreshTokenCookie": {
+        "name": "refreshToken",
+        "in": "cookie",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The refresh token used for obtaining a new access token"
+      }
+    }
+  },
+  "paths": {
+    "/register": {
+      "post": {
+        "description": "Route to create a new account",
+        "summary": "Create a new account",
+        "tags": ["User"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "John Doe",
+                  "email": "johndoe@example.com",
+                  "password": "123456"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "409": {
+            "description": "E-mail already exists!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "E-mail already exists!"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions": {
+      "post": {
+        "description": "Route to log in the user",
+        "summary": "Log in the user",
+        "tags": ["User"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "email": "johndoe@example.com",
+                  "password": "123456"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9; Path=/; Secure; HttpOnly; SameSite=Strict; Domain=localhost"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid credentials!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Invalid credentials!"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "description": "Route to user profile",
+        "summary": "Get user profile",
+        "tags": ["User"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "updated_at": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "id": "c4433c6e-92fb-4cec-a639-cf28b7c34424",
+                    "name": "John Doe",
+                    "email": "johndoe@example.com",
+                    "created_at": "2024-05-26T21:26:37.708Z",
+                    "updated_at": "2024-05-26T21:26:37.708Z"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/token/refresh": {
+      "patch": {
+        "description": "Route to refresh user access token",
+        "summary": "Refresh user access token",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/refreshTokenCookie"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "token": "c4433c6e-92fb-4cec-a639-cf28b7c34424"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Set-Cookie": {
+                "description": "Refresh Token",
+                "schema": {
+                  "type": "string",
+                  "example": "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9; Path=/; Secure; HttpOnly; SameSite=Strict; Domain=localhost"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Set-Cookie": {
+                "description": "Refresh Token",
+                "schema": {
+                  "type": "string",
+                  "example": "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9; Path=/; Secure; HttpOnly; SameSite=Strict; Domain=localhost"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions": {
+      "post": {
+        "description": "Route to create a new transaction",
+        "summary": "Create a new transaction",
+        "tags": ["Transaction"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "example": {
+                  "title": "NodeJS course",
+                  "description": "",
+                  "value": -24.9
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "transaction": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "number"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "user_id": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "transaction": {
+                      "id": "7b5d07be-e50c-4136-8b93-91143435561c",
+                      "title": "NodeJS course",
+                      "description": "",
+                      "value": -24.9,
+                      "created_at": "2024-05-31T12:46:35.468Z",
+                      "updated_at": "2024-05-31T12:46:35.468Z",
+                      "user_id": "c4433c6e-92fb-4cec-a639-cf28b7c34424"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "field": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "error": [
+                      {
+                        "field": "title",
+                        "message": "Required"
+                      },
+                      {
+                        "field": "value",
+                        "message": "Expected number, received nan"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Route to get transactions",
+        "summary": "Get transactions",
+        "tags": ["Transaction"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "title",
+            "in": "query",
+            "description": "Filter transactions by title",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Start date for filtering transactions (YYYY-MM-DD)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-01-01"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "End date for filtering transactions (YYYY-MM-DD)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-12-31"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "Order of transactions (asc or desc)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"],
+              "example": "asc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer"
+                    },
+                    "pages": {
+                      "type": "integer"
+                    },
+                    "next_page": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "previous_page": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "transactions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "number"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "user_id": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "count": 4,
+                    "pages": 1,
+                    "next_page": null,
+                    "previous_page": null,
+                    "transactions": [
+                      {
+                        "id": "0235d528-aa35-4689-9737-72a4987bca7f",
+                        "title": "Second transaction",
+                        "description": "",
+                        "value": 24.5,
+                        "created_at": "2024-05-28T19:07:35.360Z",
+                        "updated_at": "2024-05-28T19:07:35.360Z",
+                        "user_id": "c4433c6e-92fb-4cec-a639-cf28b7c34424"
+                      },
+                      {
+                        "id": "1fcc8793-7358-401c-bdf9-4bc15b6abcbc",
+                        "title": "Frist transaction new title",
+                        "description": "Add a tiny description",
+                        "value": 105.9,
+                        "created_at": "2024-05-28T17:52:15.236Z",
+                        "updated_at": "2024-05-29T13:59:50.200Z",
+                        "user_id": "c4433c6e-92fb-4cec-a639-cf28b7c34424"
+                      },
+                      {
+                        "id": "614e0fb4-7468-433a-9db9-b897105fcf18",
+                        "title": "Third",
+                        "description": "Add a tiny description",
+                        "value": 2,
+                        "created_at": "2024-05-12T20:01:37.556Z",
+                        "updated_at": "2024-05-31T18:38:28.717Z",
+                        "user_id": "c4433c6e-92fb-4cec-a639-cf28b7c34424"
+                      },
+                      {
+                        "id": "7b5d07be-e50c-4136-8b93-91143435561c",
+                        "title": "Another title",
+                        "description": "",
+                        "value": -26.5,
+                        "created_at": "2024-05-31T12:46:35.468Z",
+                        "updated_at": "2024-05-31T12:46:35.468Z",
+                        "user_id": "c4433c6e-92fb-4cec-a639-cf28b7c34424"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "field": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "error": [
+                      {
+                        "field": "title",
+                        "message": "Required"
+                      },
+                      {
+                        "field": "value",
+                        "message": "Expected number, received nan"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/{transactionId}": {
+      "put": {
+        "description": "Route to update a transaction",
+        "summary": "Update a transaction",
+        "tags": ["Transaction"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "updated_at": {
+                      "type": "string"
+                    },
+                    "user_id": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "id": "7b5d07be-e50c-4136-8b93-91143435561c",
+                    "title": "NodeJS course",
+                    "description": "",
+                    "value": -24.9,
+                    "created_at": "2024-05-31T12:46:35.468Z",
+                    "updated_at": "2024-05-31T12:46:35.468Z",
+                    "user_id": "c4433c6e-92fb-4cec-a639-cf28b7c34424"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Resource not found!"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Route to delete a transaction",
+        "summary": "Delete a transaction",
+        "tags": ["Transaction"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "error": "Resource not found!"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
