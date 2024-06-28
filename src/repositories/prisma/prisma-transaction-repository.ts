@@ -50,9 +50,8 @@ export class PrismaTransactionRepository implements TransactionsRepository {
           gte: from ? new Date(from) : undefined,
         },
       },
-      orderBy: {
-        value: order,
-      },
+      orderBy: [{ value: order }, { created_at: "desc" }],
+
       take: itemsPerPage,
       skip: (page - 1) * itemsPerPage,
     });
