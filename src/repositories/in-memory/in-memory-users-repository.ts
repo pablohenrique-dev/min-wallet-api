@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import {
   CreateUserParams,
+  UpdateUserPasswordParams,
   UsersRepository,
 } from "@/repositories/users-repository";
 import { User } from "../model/user";
@@ -37,5 +38,18 @@ export class InMemoryUsersRepository implements UsersRepository {
     if (!user) return null;
 
     return user;
+  }
+
+  async updatePassword({ userId, password }: UpdateUserPasswordParams) {
+    const userIndex = this.items.findIndex((user) => user.id === userId);
+
+    if (userIndex !== -1) {
+      this.items[userIndex] = {
+        ...this.items[userIndex],
+        password_hashed: password,
+      };
+    }
+
+    return this.items[userIndex];
   }
 }
