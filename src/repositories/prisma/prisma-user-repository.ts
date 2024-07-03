@@ -1,4 +1,8 @@
-import { CreateUserParams, UsersRepository } from "../users-repository";
+import {
+  CreateUserParams,
+  UpdateUserPasswordParams,
+  UsersRepository,
+} from "../users-repository";
 import { prisma } from "@/lib/prisma";
 
 export class PrismaUserRepository implements UsersRepository {
@@ -28,6 +32,19 @@ export class PrismaUserRepository implements UsersRepository {
     const user = await prisma.user.findUnique({
       where: {
         id,
+      },
+    });
+
+    return user;
+  }
+
+  async updatePassword({ userId, password }: UpdateUserPasswordParams) {
+    const user = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        password_hashed: password,
       },
     });
 
