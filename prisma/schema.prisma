@@ -15,7 +15,8 @@ model User {
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 
-  transactions Transaction[]
+  transactions       Transaction[]
+  resetPasswordToken ResetPasswordToken?
 
   @@map("users")
 }
@@ -32,4 +33,17 @@ model Transaction {
   user_id String
 
   @@map("transactions")
+}
+
+model ResetPasswordToken {
+  id           String   @id @default(uuid())
+  token_hashed String
+  expiry_date  DateTime
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  users   User   @relation(fields: [user_id], references: [id])
+  user_id String @unique
+
+  @@map("reset_password_tokens")
 }
