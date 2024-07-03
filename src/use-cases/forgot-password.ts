@@ -10,8 +10,9 @@ interface ForgotPasswordUseCaseParams {
 }
 
 interface ForgotPasswordUseCaseResponse {
-  user_id: string;
+  email: string;
   token: string;
+  username: string;
 }
 
 export class ForgotPasswordUseCase {
@@ -48,8 +49,9 @@ export class ForgotPasswordUseCase {
     });
 
     return {
-      user_id: user.id,
+      email: user.email,
       token: resetPasswordToken,
+      username: user.name,
     };
   }
 }
