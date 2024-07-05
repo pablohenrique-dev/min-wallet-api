@@ -16,6 +16,8 @@ describe("Delete transaction (e2e)", () => {
         value: 24.9,
         description: "Just a random description",
         user_id: user.id,
+        date: new Date(),
+        type: "EXPENSE"
       },
     });
 

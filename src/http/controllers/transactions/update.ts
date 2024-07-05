@@ -16,13 +16,16 @@ export async function updateTransactionController(req: Request, res: Response) {
       message: "The value should be different from 0!",
     }),
     description: z.string().trim().default(""),
+    date: z.coerce.date({ message: "This field must be filled!" }),
+    type: z.enum(["INCOME", "EXPENSE"], {
+      message: "This field must be filled!",
+    }),
   });
 
   const { id } = transactionIdParamSchema.parse(req.params);
 
-  const { value, title, description } = updateTransactionBodySchema.parse(
-    req.body
-  );
+  const { value, title, description, date, type } =
+    updateTransactionBodySchema.parse(req.body);
 
   try {
     const updateTransactionUseCase = makeUpdateTransactionUseCase();
@@ -33,6 +36,8 @@ export async function updateTransactionController(req: Request, res: Response) {
       description,
       value,
       user_id,
+      date,
+      type,
     });
 
     return res.status(200).json(transaction);

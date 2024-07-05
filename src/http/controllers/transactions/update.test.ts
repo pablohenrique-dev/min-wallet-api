@@ -16,6 +16,8 @@ describe("Update transaction (e2e)", () => {
         value: 24.9,
         description: "Just a random description",
         user_id: user.id,
+        date: new Date(),
+        type: "EXPENSE",
       },
     });
 
@@ -26,6 +28,8 @@ describe("Update transaction (e2e)", () => {
         title: "Another title",
         value: 24.9,
         description: "Just a random description",
+        date: new Date(),
+        type: "INCOME",
       });
 
     expect(response.status).toBe(200);

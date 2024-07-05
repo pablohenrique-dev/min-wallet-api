@@ -5,6 +5,8 @@ export interface CreateTransactionParams {
   description: string;
   value: number;
   user_id: string;
+  date: Date;
+  type: "INCOME" | "EXPENSE";
 }
 
 export interface FindManyTransactionsParams {
@@ -35,6 +37,8 @@ export interface TransactionsRepository {
     description,
     value,
     user_id,
+    date,
+    type,
   }: CreateTransactionParams) => Promise<Transaction>;
 
   findMany: ({
@@ -63,5 +67,7 @@ export interface TransactionsRepository {
     title,
     description,
     value,
+    date,
+    type,
   }: UpdateByIdTransactionParams) => Promise<Transaction>;
 }

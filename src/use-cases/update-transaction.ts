@@ -8,6 +8,8 @@ interface UpdateTransactionUseCaseParams {
   title: string;
   description: string;
   value: number;
+  date: Date;
+  type: "INCOME" | "EXPENSE";
 }
 
 interface UpdateTransactionUseCaseResponse {
@@ -23,6 +25,8 @@ export class UpdateTransactionUseCase {
     title,
     description,
     value,
+    date,
+    type,
   }: UpdateTransactionUseCaseParams): Promise<UpdateTransactionUseCaseResponse> {
     const doesTheTransactionExist = await this.transactionsRepository.findById({
       user_id,
@@ -39,6 +43,8 @@ export class UpdateTransactionUseCase {
       title,
       description,
       value,
+      date,
+      type,
     });
 
     return { transaction };

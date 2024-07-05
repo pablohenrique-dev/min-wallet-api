@@ -11,11 +11,14 @@ export async function createTransactionController(req: Request, res: Response) {
       message: "The value should be different from 0!",
     }),
     description: z.string().trim().default(""),
+    date: z.coerce.date({ message: "This field must be filled in!" }),
+    type: z.enum(["INCOME", "EXPENSE"], {
+      message: "This field must be filled in!",
+    }),
   });
 
-  const { title, value, description } = createTransactionBodySchema.parse(
-    req.body
-  );
+  const { title, value, description, date, type } =
+    createTransactionBodySchema.parse(req.body);
 
   const createTransactionUseCase = makeGetTransactionUseCase();
 
@@ -24,6 +27,8 @@ export async function createTransactionController(req: Request, res: Response) {
     value,
     description,
     user_id,
+    date,
+    type,
   });
 
   return res.status(200).json(transaction);

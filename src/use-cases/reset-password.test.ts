@@ -2,11 +2,11 @@ import { InMemoryResetPasswordTokenRepository } from "@/repositories/in-memory/i
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { beforeEach, describe, expect, it } from "vitest";
 import { ResetPasswordUseCase } from "./reset-password";
-import { InvalidCredentialsError } from "./errors/invalid-credentials";
 import { InvalidOrExpiredPasswordResetTokenError } from "./errors/invalid-or-expired-password-reset-token";
 import { randomBytes } from "crypto";
 import dayjs from "dayjs";
 import { hash } from "bcryptjs";
+import { ResourceNotFoundError } from "./errors/resource-not-fount";
 
 describe("Reset password useCase", () => {
   let resetPasswordTokenRepository: InMemoryResetPasswordTokenRepository;
@@ -29,7 +29,7 @@ describe("Reset password useCase", () => {
         email: "johndoe@example.com",
         password: "123456",
       })
-    ).rejects.toBeInstanceOf(InvalidCredentialsError);
+    ).rejects.toBeInstanceOf(ResourceNotFoundError);
   });
 
   it("Should not be able to reset the password if there is no reset token stored on the database", async () => {

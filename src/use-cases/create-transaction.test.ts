@@ -17,6 +17,8 @@ describe("Create Transactions useCase", () => {
       description: "Just a simple description",
       value: 24.9,
       user_id: "user-01",
+      date: new Date(),
+      type: "EXPENSE",
     });
 
     expect(transaction.id).toBeTypeOf("string");

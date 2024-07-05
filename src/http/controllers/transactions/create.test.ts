@@ -14,9 +14,10 @@ describe("Create transaction (e2e)", () => {
         title: "My first transaction",
         value: 24.9,
         description: "Just a random description",
+        date: new Date(),
+        type: "EXPENSE",
       });
 
     expect(response.statusCode).toBe(200);
-    
   });
 });

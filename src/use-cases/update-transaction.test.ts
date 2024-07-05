@@ -19,6 +19,8 @@ describe("Update transaction useCase", () => {
         description: "",
         value: 1 + i,
         user_id: "user-01",
+        date: new Date(),
+        type: "INCOME",
       });
     }
 
@@ -29,6 +31,8 @@ describe("Update transaction useCase", () => {
         title: "NodeJs course",
         description: "",
         value: 24.9,
+        date: new Date(),
+        type: "EXPENSE",
       })
     ).rejects.toBeInstanceOf(ResourceNotFoundError);
   });
@@ -39,6 +43,8 @@ describe("Update transaction useCase", () => {
       description: "Just a simple description",
       value: 24.9,
       user_id: "user-01",
+      date: new Date(),
+      type: "EXPENSE",
     });
 
     const { transaction } = await sut.execute({
@@ -47,8 +53,10 @@ describe("Update transaction useCase", () => {
       value: 24.9,
       user_id: newTransaction.user_id,
       id: newTransaction.id,
+      date: new Date(),
+      type: "EXPENSE",
     });
-    
+
     expect(transaction.description).toBe("A course about node, ts and test");
   });
 });

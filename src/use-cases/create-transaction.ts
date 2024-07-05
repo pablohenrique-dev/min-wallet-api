@@ -6,6 +6,8 @@ interface CreateTransactionUseCaseParams {
   description: string;
   value: number;
   user_id: string;
+  date: Date;
+  type: "INCOME" | "EXPENSE";
 }
 
 interface CreateTransactionUseCaseResponse {
@@ -20,12 +22,16 @@ export class CreateTransactionUseCase {
     description,
     user_id,
     value,
+    date,
+    type,
   }: CreateTransactionUseCaseParams): Promise<CreateTransactionUseCaseResponse> {
     const transaction = await this.transactionsRepository.create({
       title,
       description,
       user_id,
       value,
+      date,
+      type,
     });
 
     return { transaction };

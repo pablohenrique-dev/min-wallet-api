@@ -23,7 +23,7 @@ export async function getUserProfileController(req: Request, res: Response) {
     });
   } catch (error) {
     if (error instanceof ResourceNotFoundError) {
-      return res.status(409).json({
+      return res.status(404).json({
         error: error.message,
       });
     }

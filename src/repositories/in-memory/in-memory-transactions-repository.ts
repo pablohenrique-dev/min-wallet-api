@@ -17,6 +17,8 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
     title,
     value,
     description,
+    date,
+    type,
   }: CreateTransactionParams) {
     const transaction: Transaction = {
       id: randomUUID(),
@@ -24,6 +26,8 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
       description,
       value,
       user_id,
+      date,
+      type,
       created_at: new Date(),
       updated_at: new Date(),
     };
@@ -40,7 +44,7 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
     from,
     to,
     order,
-    itemsPerPage
+    itemsPerPage,
   }: FindManyTransactionsParams) {
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -104,6 +108,8 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
     title,
     value,
     description,
+    date,
+    type,
   }: UpdateByIdTransactionParams) {
     const transactionIndex = this.items.findIndex(
       (transaction) => transaction.id === id && transaction.user_id === user_id
@@ -116,6 +122,8 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
         description,
         value,
         updated_at: new Date(),
+        date,
+        type,
       };
     }
 
