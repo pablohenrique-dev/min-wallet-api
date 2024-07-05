@@ -22,14 +22,16 @@ model User {
 }
 
 model Transaction {
-  id          String   @id @default(uuid())
+  id          String          @id @default(uuid())
   title       String
   description String
   value       Float
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  date        DateTime
+  type        TransactionType
+  created_at  DateTime        @default(now())
+  updated_at  DateTime        @updatedAt
 
-  User    User   @relation(fields: [user_id], references: [id])
+  User    User   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   user_id String
 
   @@map("transactions")
@@ -42,8 +44,13 @@ model ResetPasswordToken {
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
 
-  users   User   @relation(fields: [user_id], references: [id])
+  users   User   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   user_id String @unique
 
   @@map("reset_password_tokens")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
 }
