@@ -1,10 +1,10 @@
 import { ResetPasswordTokenRepository } from "@/repositories/reset-password-token-repository";
 import { UsersRepository } from "@/repositories/users-repository";
-import { InvalidCredentialsError } from "./errors/invalid-credentials";
 import { InvalidOrExpiredPasswordResetTokenError } from "./errors/invalid-or-expired-password-reset-token";
 import { compare, hash } from "bcryptjs";
 import { isWithinOneHour } from "@/utils/is-within-one-hour";
 import { User } from "@/repositories/model/user";
+import { ResourceNotFoundError } from "./errors/resource-not-fount";
 
 interface ResetPasswordUseCaseParams {
   token: string;
@@ -30,7 +30,7 @@ export class ResetPasswordUseCase {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new InvalidCredentialsError();
+      throw new ResourceNotFoundError();
     }
 
     const passwordResetToken =

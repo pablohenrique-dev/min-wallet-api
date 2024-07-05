@@ -1,5 +1,6 @@
 import { InvalidCredentialsError } from "@/use-cases/errors/invalid-credentials";
 import { InvalidOrExpiredPasswordResetTokenError } from "@/use-cases/errors/invalid-or-expired-password-reset-token";
+import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-fount";
 import { makeResetPasswordUseCase } from "@/use-cases/factories/make-reset-password-use-case";
 import { sendEmail } from "@/utils/emails/send-email";
 import { resetPasswordEmailTemplate } from "@/utils/emails/templates/raw-html/reset-password";
@@ -38,10 +39,13 @@ export async function resetPasswordController(req: Request, res: Response) {
 
     return res.status(200).json();
   } catch (error) {
-    if (
-      error instanceof InvalidCredentialsError ||
-      error instanceof InvalidOrExpiredPasswordResetTokenError
-    ) {
+    if (error instanceof ResourceNotFoundError) {
+      return res.status(404).json({
+        error: error.message,
+      });
+    }
+
+    if (error instanceof InvalidOrExpiredPasswordResetTokenError) {
       return res.status(400).json({
         error: error.message,
       });
