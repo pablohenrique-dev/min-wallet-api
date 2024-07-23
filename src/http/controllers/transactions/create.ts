@@ -1,4 +1,4 @@
-import { makeGetTransactionUseCase } from "@/use-cases/factories/make-create-transaction-use-case";
+import { makeCreateTransactionUseCase } from "@/use-cases/factories/make-create-transaction-use-case";
 import { Request, Response } from "express";
 import z from "zod";
 
@@ -20,7 +20,7 @@ export async function createTransactionController(req: Request, res: Response) {
   const { title, value, description, date, type } =
     createTransactionBodySchema.parse(req.body);
 
-  const createTransactionUseCase = makeGetTransactionUseCase();
+  const createTransactionUseCase = makeCreateTransactionUseCase();
 
   const { transaction } = await createTransactionUseCase.execute({
     title,
