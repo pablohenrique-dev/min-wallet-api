@@ -19,6 +19,12 @@ export interface FindManyTransactionsParams {
   itemsPerPage: number;
 }
 
+export interface FindManyByPeriodTransactionsParams {
+  user_id: string;
+  from?: string;
+  to?: string;
+}
+
 export interface FindByIdTransactionParams {
   user_id: string;
   id: string;
@@ -51,6 +57,14 @@ export interface TransactionsRepository {
     itemsPerPage,
   }: FindManyTransactionsParams) => Promise<{
     count: number;
+    transactions: Transaction[];
+  }>;
+
+  findManyByPeriod: ({
+    user_id,
+    from,
+    to,
+  }: FindManyByPeriodTransactionsParams) => Promise<{
     transactions: Transaction[];
   }>;
 

@@ -4,10 +4,12 @@ import {
   CreateTransactionParams,
   DeleteByIdTransactionParams,
   FindByIdTransactionParams,
+  FindManyByPeriodTransactionsParams,
   FindManyTransactionsParams,
   TransactionsRepository,
   UpdateByIdTransactionParams,
 } from "../transactions-repository";
+import dayjs from "dayjs";
 
 export class InMemoryTransactionsRepository implements TransactionsRepository {
   public items: Transaction[] = [];
@@ -80,6 +82,22 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 
     return {
       count: transactions.length,
+      transactions,
+    };
+  }
+
+  async findManyByPeriod({
+    user_id,
+    from,
+    to,
+  }: FindManyByPeriodTransactionsParams) {
+    let transactions = this.items.filter((transaction) => {
+      const transactionDate = dayjs(transaction.date);
+
+      return transaction.user_id === user_id;
+    });
+
+    return {
       transactions,
     };
   }

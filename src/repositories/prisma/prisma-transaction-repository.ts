@@ -2,6 +2,7 @@ import {
   CreateTransactionParams,
   DeleteByIdTransactionParams,
   FindByIdTransactionParams,
+  FindManyByPeriodTransactionsParams,
   FindManyTransactionsParams,
   TransactionsRepository,
   UpdateByIdTransactionParams,
@@ -45,12 +46,12 @@ export class PrismaTransactionRepository implements TransactionsRepository {
           contains: title,
           mode: "insensitive",
         },
-        created_at: {
+        date: {
           lte: to ? new Date(to) : undefined,
           gte: from ? new Date(from) : undefined,
         },
       },
-      orderBy: [{ value: order }, { created_at: "desc" }],
+      orderBy: [{ value: order }, { date: "desc" }],
 
       take: itemsPerPage,
       skip: (page - 1) * itemsPerPage,
@@ -72,6 +73,26 @@ export class PrismaTransactionRepository implements TransactionsRepository {
 
     return {
       count,
+      transactions,
+    };
+  }
+
+  async findManyByPeriod({
+    user_id,
+    from,
+    to,
+  }: FindManyByPeriodTransactionsParams) {
+    const transactions = await prisma.transaction.findMany({
+      where: {
+        user_id,
+        date: {
+          lte: to ? new Date(to) : undefined,
+          gte: from ? new Date(from) : undefined,
+        },
+      },
+    });
+
+    return {
       transactions,
     };
   }
