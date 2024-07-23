@@ -19,6 +19,8 @@ describe("Delete transaction useCase", () => {
         description: "",
         value: 1 + i,
         user_id: "user-01",
+        date: new Date(),
+        type: "EXPENSE",
       });
     }
 
@@ -38,6 +40,8 @@ describe("Delete transaction useCase", () => {
         description: "",
         value: 1 + i,
         user_id: "user-01",
+        date: new Date(),
+        type: "EXPENSE",
       });
       transactionsAmount++;
     }
@@ -47,6 +51,8 @@ describe("Delete transaction useCase", () => {
       description: "",
       value: 20,
       user_id: "user-01",
+      date: new Date(),
+      type: "EXPENSE",
     });
 
     const { id } = await sut.execute({
@@ -54,7 +60,7 @@ describe("Delete transaction useCase", () => {
       id: secondTransaction.id,
     });
 
-    expect(id ).toBe(secondTransaction.id);
+    expect(id).toBe(secondTransaction.id);
     expect(transactionsAmount).toBe(5);
   });
 });

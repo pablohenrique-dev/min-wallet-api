@@ -16,6 +16,8 @@ describe("Get all transactions useCase", () => {
         value: 1 + i,
         user_id: "user-01",
         description: "",
+        date: new Date(),
+        type: "EXPENSE",
       });
     }
   });
