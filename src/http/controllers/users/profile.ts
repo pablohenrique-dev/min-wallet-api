@@ -27,5 +27,7 @@ export async function getUserProfileController(req: Request, res: Response) {
         error: error.message,
       });
     }
+
+    throw error;
   }
 }

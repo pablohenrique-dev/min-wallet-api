@@ -1,6 +1,7 @@
 import {
   CreateUserParams,
   UpdateUserPasswordParams,
+  UpdateUserProfileParams,
   UsersRepository,
 } from "../users-repository";
 import { prisma } from "@/lib/prisma";
@@ -45,6 +46,20 @@ export class PrismaUserRepository implements UsersRepository {
       },
       data: {
         password_hashed: password,
+      },
+    });
+
+    return user;
+  }
+
+  async updateProfile({ email, name, userId }: UpdateUserProfileParams) {
+    const user = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        email,
+        name,
       },
     });
 
