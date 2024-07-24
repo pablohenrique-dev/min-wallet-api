@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import {
   CreateUserParams,
   UpdateUserPasswordParams,
+  UpdateUserProfileParams,
   UsersRepository,
 } from "@/repositories/users-repository";
 import { User } from "../model/user";
@@ -47,6 +48,20 @@ export class InMemoryUsersRepository implements UsersRepository {
       this.items[userIndex] = {
         ...this.items[userIndex],
         password_hashed: password,
+      };
+    }
+
+    return this.items[userIndex];
+  }
+
+  async updateProfile({ email, name, userId }: UpdateUserProfileParams) {
+    const userIndex = this.items.findIndex((user) => user.id === userId);
+
+    if (userIndex !== -1) {
+      this.items[userIndex] = {
+        ...this.items[userIndex],
+        email,
+        name,
       };
     }
 
