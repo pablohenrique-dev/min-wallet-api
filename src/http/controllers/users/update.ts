@@ -17,13 +17,13 @@ export async function updateUserProfileController(req: Request, res: Response) {
 
     const updateUserProfileUseCase = makeUpdateUserProfileUseCase();
 
-    await updateUserProfileUseCase.execute({
+    const { user: updatedUser } = await updateUserProfileUseCase.execute({
       userId,
       email,
       name,
     });
 
-    return res.status(200).json();
+    return res.status(200).json(updatedUser);
   } catch (error) {
     if (error instanceof ResourceNotFoundError) {
       return res.status(404).json({
