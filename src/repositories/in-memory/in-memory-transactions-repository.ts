@@ -56,7 +56,7 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 
     let transactions = this.items
       .filter((transaction) => {
-        const transactionDate = new Date(transaction.created_at);
+        const transactionDate = new Date(transaction.date);
 
         return (
           transaction.user_id === user_id &&
@@ -90,11 +90,22 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
     user_id,
     from,
     to,
+    title,
   }: FindManyByPeriodTransactionsParams) {
     let transactions = this.items.filter((transaction) => {
-      const transactionDate = dayjs(transaction.date);
+      const transactionDate = new Date(transaction.date);
 
-      return transaction.user_id === user_id;
+      const fromDate = from ? new Date(from) : null;
+      const toDate = to ? new Date(to) : null;
+
+      return (
+        transaction.user_id === user_id &&
+        transaction.title
+          .toLocaleLowerCase()
+          .includes(title ? title.toLocaleLowerCase() : "") &&
+        (!fromDate || transactionDate >= fromDate) &&
+        (!toDate || transactionDate <= toDate)
+      );
     });
 
     return {

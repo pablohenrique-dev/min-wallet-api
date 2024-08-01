@@ -23,6 +23,7 @@ export interface FindManyByPeriodTransactionsParams {
   user_id: string;
   from?: string;
   to?: string;
+  title?: string;
 }
 
 export interface FindByIdTransactionParams {
@@ -64,6 +65,7 @@ export interface TransactionsRepository {
     user_id,
     from,
     to,
+    title
   }: FindManyByPeriodTransactionsParams) => Promise<{
     transactions: Transaction[];
   }>;

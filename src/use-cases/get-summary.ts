@@ -3,18 +3,20 @@ import { TransactionsRepository } from "@/repositories/transactions-repository";
 interface GetSummayUseCaseParams {
   from?: string;
   to?: string;
+  title?: string;
   userId: string;
 }
 
 export class GetSummayUseCase {
   constructor(private transactionsRepository: TransactionsRepository) {}
 
-  async execute({ from, to, userId }: GetSummayUseCaseParams) {
+  async execute({ from, to, userId, title }: GetSummayUseCaseParams) {
     const { transactions } = await this.transactionsRepository.findManyByPeriod(
       {
         user_id: userId,
         from,
         to,
+        title,
       }
     );
 

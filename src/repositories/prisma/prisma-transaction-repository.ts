@@ -81,10 +81,15 @@ export class PrismaTransactionRepository implements TransactionsRepository {
     user_id,
     from,
     to,
+    title,
   }: FindManyByPeriodTransactionsParams) {
     const transactions = await prisma.transaction.findMany({
       where: {
         user_id,
+        title: {
+          contains: title,
+          mode: "insensitive",
+        },
         date: {
           lte: to ? new Date(to) : undefined,
           gte: from ? new Date(from) : undefined,
