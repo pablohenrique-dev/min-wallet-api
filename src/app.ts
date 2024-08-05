@@ -7,8 +7,9 @@ import { handleError } from "./http/middlewares/handle-error";
 
 import swaggerUI from "swagger-ui-express";
 import swaggerDocument from "../swagger.json";
+import { env } from "./env";
 
-const CORS_ALLOWED_ORIGINS = ["http://localhost:5173"];
+const CORS_ALLOWED_ORIGINS = [env.CLIENT_URL];
 
 export const app = express();
 
@@ -22,6 +23,4 @@ app.use(
 );
 
 app.use(routes);
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument, { explorer: true }));
-
 app.use(handleError);
