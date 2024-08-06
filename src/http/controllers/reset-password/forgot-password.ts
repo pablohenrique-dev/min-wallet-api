@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-fount";
 import { makeForgotPasswordUseCase } from "@/use-cases/factories/make-forgot-password-use-case";
 import { sendEmail } from "@/utils/emails/send-email";
@@ -23,7 +24,7 @@ export async function forgotPasswordController(req: Request, res: Response) {
       email,
     });
 
-    const resetLink = `http://localhost:5173/reset-password?token=${token}&email=${userEmail}`;
+    const resetLink = `${env.CLIENT_URL}/reset-password?token=${token}&email=${userEmail}`;
 
     sendEmail({
       to: email,
