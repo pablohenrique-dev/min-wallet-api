@@ -52,7 +52,6 @@ export class PrismaTransactionRepository implements TransactionsRepository {
         },
       },
       orderBy: [{ value: order }, { date: "desc" }],
-
       take: itemsPerPage,
       skip: (page - 1) * itemsPerPage,
     });
@@ -64,7 +63,7 @@ export class PrismaTransactionRepository implements TransactionsRepository {
           contains: title,
           mode: "insensitive",
         },
-        created_at: {
+        date: {
           lte: to ? new Date(to) : undefined,
           gte: from ? new Date(from) : undefined,
         },
