@@ -14,7 +14,8 @@
     "test:watch": "vitest --dir src/use-cases",
     "test:e2e": "vitest run --dir src/http",
     "test:e2e:watch": "vitest --dir src/http",
-    "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment"
+    "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
+    "wrap": "npm install && docker-compose up -d && npx prisma migrate dev && npm run dev"
   },
   "keywords": [],
   "author": "",

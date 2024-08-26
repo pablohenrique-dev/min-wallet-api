@@ -2,29 +2,54 @@
 
 ## Descrição
 
-A ideia do MinWallet é ser um app que permite os usuários cadastrar todos os seus gastos e ganhos de forma que ao final do mês, o mesmo possa ter controle sobre sua vida financeira.
+O MinWallet é um app que permite aos usuários cadastrar, atualizar e excluir todos os seus gastos e ganhos de forma que ao final do mês, o mesmo possa ter controle sobre sua vida financeira. Acesse o repositório front-end [aqui](https://github.com/pablohenrique-dev/min-wallet-frontend).
 
-## Requisitos funcionais
+## Tecnologias utilizadas
 
-- [ ] Deve ser possível a criação de uma conta;
-- [ ] Deve ser possível se autenticar;
-- [ ] Deve ser possível definir um período customizável para o gerenciamento das movimentações;
-- [ ] Deve ser possível o usuário cadastrar o valor de seus gastos e ganhos, além de uma breve descrição se necessário;
-- [ ] Deve ser possível editar ou excluir as movimentações;
-- [ ] Deve ser possível categorizar as movimentações (alimentação, lazer...);
-- [ ] Deve ser possível estabelecer um valor mensal máximo para os gastos;
-- [ ] Deve ser possível enviar um email para o usuário informando que o valor máximo de gastos estabelecidos está se aproximando;
-- [ ] Deve ser possível enviar um email parabenizando o usuário caso a meta mensal seja alcançada;
-- [ ] Deve ser possível obter o histórico das movimentações baseadas em uma data definida pelo usuário;
-- [ ] Deve ser possível gerar relatórios das movimentações do período atual em relação ao período anterior;
-- [ ] Deve ser possível gerar uma lista com as movimentações separadas por períodos;
+- Node.js
+- TypeScript
+- Express
+- Prisma
+- Docker
+- Vitest
+- Zod
 
-## Requisitos não funcionais
+## Rodando o projeto localmente
 
-- [ ] O acesso ao sistema deve ser controlado por autenticação com email e senha ou login social (google, facebook, github...);
-- [ ] O sistema precisa permitir o usuário controlar o tema da interface;
-- [ ] O sistema precisa ser responsivo;
+#### 1º - Abra o seu terminal e clone o projeto com o comando abaixo:
 
-## Regras de negócios
+```bash
+git clone git@github.com:pablohenrique-dev/min-wallet-api.git
+```
 
-- [ ] Não deve ser possível o cadastro de movimentação com valor zero;
+#### 2º - Navege para a pasta do projeto:
+
+```bash
+cd min-wallet-api/
+```
+
+#### 3º - Crie um arquivo .env e cole as informações abaixo:
+
+```js
+NODE_ENV="dev"
+PORT=3333
+DATABASE_URL ="postgresql://docker:docker@localhost:5432/api-minwallet?schema=public"
+JWT_SECRET="jwt-secret-example"
+CLIENT_URL="http://localhost:5173"
+
+MAIL_HOST=" "
+MAIL_PORT=" "
+MAIL_USER=" "
+MAIL_PASS=" "
+MAIL_FROM=" "
+```
+
+#### 4º - No seu terminal, execute o comando abaixo:
+
+```bash
+npm run wrap
+```
+
+#### 5º - Acessando a documentação das rotas:
+
+Com o projeto rodando, basta acessar a url: http://localhost:3333/api-docs/#/
